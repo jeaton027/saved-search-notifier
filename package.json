@@ -1,6 +1,7 @@
 {
   "name": "saved-search-notifier",
   "private": true,
+  "packageManager": "pnpm@9",
   "version": "0.1.0",
   "scripts": {
     "lint": "echo \"TODO: add lint\"",
