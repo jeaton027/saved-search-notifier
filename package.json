@@ -1,11 +1,12 @@
 {
-  "name": "saved-search-notifier",
-  "private": true,
-  "packageManager": "pnpm@9",
-  "version": "0.1.0",
-  "scripts": {
-    "lint": "echo \"TODO: add lint\"",
-    "test": "echo \"TODO: add tests\"",
-    "build": "echo \"TODO: add build\""
-  }
+	"name": "saved-search-notifier",
+	"private": true,
+	"packageManager": "pnpm@9.12.3",
+	"version": "0.1.0",
+	"scripts": {
+		"build": "pnpm -r build",
+		"test": "pnpm -r test",
+		"typecheck": "pnpm -r typecheck",
+		"lint": "echo \"TODO: add lint\""
+	}
 }
