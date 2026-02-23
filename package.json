@@ -1,0 +1,10 @@
+{
+  "name": "saved-search-notifier",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "lint": "echo \"TODO: add lint\"",
+    "test": "echo \"TODO: add tests\"",
+    "build": "echo \"TODO: add build\""
+  }
+}
