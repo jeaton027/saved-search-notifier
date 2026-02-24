@@ -5,22 +5,13 @@ import {
 	type WatchPollJobResult,
 	type WatchPollJobName
  } from "@saved-search/shared";
+import { processWatchPollJob } from "./watch-poll-processor.js";
 
 const redisUrl = process.env.REDIS_URL ?? "redis://127.0.0.1:6379";
 
 const watchPollWorker = new Worker<WatchPollJobData, WatchPollJobResult, WatchPollJobName>(
 	queueNames.watchPoll,
-	async (job): Promise<WatchPollJobResult> => {
-		const { watchId } = job.data;
-
-		console.log("processing watch poll job", {
-			jobId: job.id,
-			queue: queueNames.watchPoll,
-			watchId
-		});
-
-		return { success: true, watchId };
-	},
+	processWatchPollJob,
 	{
 		connection: { url: redisUrl }
 	}
@@ -38,32 +29,3 @@ console.log("worker online", {
 	queue: queueNames.watchPoll,
 	redisUrl
 });
-
-/*
-Temporary placeholder
-import { processWatch } from "./worker.js";
-
-const start = async (): Promise<void> => {
-	const result = await processWatch({
-		name: "bootstrap",
-		pollFrequencyMinutes: 15,
-		queryDefinition: {
-		keywords: "bike",
-		includeTerms: [],
-		excludeTerms: [],
-		priceMin: null,
-		priceMax: null,
-		locationHint: null,
-		feedUrl: "https://example.com/feed"
-		}
-	});
-
-	console.log("worker online", result);
-};
-
-start().catch((error) => {
-	console.error(error);
-	process.exit(1);
-});
-
- */

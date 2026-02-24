@@ -7,6 +7,7 @@ import {
 	type WatchPollJobName,
 	type WatchPollJobResult
 } from "@saved-search/shared";
+import { processWatchPollJob } from "../src/watch-poll-processor.js";
 
 const redisUrl = process.env.REDIS_URL ?? "redis://127.0.0.1:6379";
 const queueName = `${queueNames.watchPoll}-test-${randomUUID()}`;
@@ -24,8 +25,9 @@ let seenWatchId: string | undefined;
 const worker = new Worker<WatchPollJobData, WatchPollJobResult, WatchPollJobName>(
 	queueName,
 	async (job) => {
-		seenWatchId = job.data.watchId;
-		return { success: true, watchId: job.data.watchId };
+		const result = await processWatchPollJob(job);
+		seenWatchId = result.watchId;
+		return result;
 	},
 	{
 		connection: { url: redisUrl }
