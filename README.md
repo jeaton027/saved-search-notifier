@@ -31,3 +31,16 @@ Web app that monitors RSS feeds and notifies users when new matching listings ap
 - - pnpm --filter @saved-search/worker add bullmq ioredis
 	BullMQ needs Redis client for connection handling. Later kept in package.json + lockfile
 	and installed via normal pnpm install command.
+
+### Common Commands for testing
+
+pnpm --filter @saved-search/shared build
+pnpm --filter @saved-search/api typecheck
+pnpm --filter @saved-search/worker typecheck
+
+pnpm --filter @saved-search/shared typecheck
+pnpm --filter @saved-search/api typecheck
+pnpm --filter @saved-search/worker typecheck
+
+docker compose -f infra/docker-compose.yml up -d redis
+docker compose -f infra/docker-compose.yml ps

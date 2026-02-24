@@ -1,12 +1,17 @@
 import { Worker } from "bullmq";
-import { queueNames } from "@saved-search/shared";
+import { 
+	queueNames,
+	type WatchPollJobData,
+	type WatchPollJobResult,
+	type WatchPollJobName
+ } from "@saved-search/shared";
 
 const redisUrl = process.env.REDIS_URL ?? "redis://127.0.0.1:6379";
 
-const watchPollWorker = new Worker(
+const watchPollWorker = new Worker<WatchPollJobData, WatchPollJobResult, WatchPollJobName>(
 	queueNames.watchPoll,
-	async (job): Promise<{ success: true; watchId: string }> => {
-		const { watchId } = job.data as { watchId: string };
+	async (job): Promise<WatchPollJobResult> => {
+		const { watchId } = job.data;
 
 		console.log("processing watch poll job", {
 			jobId: job.id,
