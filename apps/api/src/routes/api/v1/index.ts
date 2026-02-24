@@ -1,5 +1,7 @@
 import type { FastifyPluginAsync } from "fastify";
 import watchesRoutes from "./watches.js";
+import queueRoutes from "./queue.js";
+
 
 const v1Routes: FastifyPluginAsync = async (app) => {
 	app.get("/health", async () => {
@@ -7,6 +9,7 @@ const v1Routes: FastifyPluginAsync = async (app) => {
 	});
 
 	app.register(watchesRoutes, { prefix: "/watches" });
+	app.register(queueRoutes, { prefix: "/queue" });
 };
 
 export default v1Routes;
