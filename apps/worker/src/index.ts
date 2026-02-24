@@ -1,3 +1,41 @@
+import { Worker } from "bullmq";
+import { queueNames } from "@saved-search/shared";
+
+const redisUrl = process.env.REDIS_URL ?? "redis://127.0.0.1:6379";
+
+const watchPollWorker = new Worker(
+	queueNames.watchPoll,
+	async (job): Promise<{ success: true; watchId: string }> => {
+		const { watchId } = job.data as { watchId: string };
+
+		console.log("processing watch poll job", {
+			jobId: job.id,
+			queue: queueNames.watchPoll,
+			watchId
+		});
+
+		return { success: true, watchId };
+	},
+	{
+		connection: { url: redisUrl }
+	}
+);
+
+watchPollWorker.on("completed", (job, result) => {
+	console.log("watch poll job completed", { jobId: job.id, result });
+});
+
+watchPollWorker.on("failed", (job, err) => {
+	console.error("watch poll job failed", { jobId: job?.id, error: err.message });
+});
+
+console.log("worker online", {
+	queue: queueNames.watchPoll,
+	redisUrl
+});
+
+/*
+Temporary placeholder
 import { processWatch } from "./worker.js";
 
 const start = async (): Promise<void> => {
@@ -22,3 +60,5 @@ start().catch((error) => {
 	console.error(error);
 	process.exit(1);
 });
+
+ */

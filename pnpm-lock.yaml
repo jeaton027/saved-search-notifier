@@ -80,6 +80,12 @@ importers:
       '@saved-search/shared':
         specifier: workspace:*
         version: link:../../packages/shared
+      bullmq:
+        specifier: ^5.16.0
+        version: 5.70.1
+      ioredis:
+        specifier: ^5.4.1
+        version: 5.9.3
     devDependencies:
       '@types/node':
         specifier: ^22.5.5

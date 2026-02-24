@@ -1,0 +1,50 @@
+***
+test end-to-end queue pipeline is successful
+
+API can enqueue a BullMQ job onto watch-poll
+Redis is reachable by both API and worker
+Worker is subscribed to watch-poll
+Worker receives job.data.watchId
+Worker returns success, so BullMQ marks the job as completed
+
+***
+
+
+open 3 terminals in parent folder
+
+1.
+	run command
+	pnpm --filter @saved-search/worker dev
+
+
+2. Start API
+	run command:
+	pnpm --filter @saved-search/api dev
+
+3. Enqueue a job with curl
+	run command:
+	curl -X POST http://localhost:3000/api/v1/queue/watch-poll/test-watch-123
+
+
+Calls 
+POST /api/v1/queue/watch-poll/:watchId
+API runs enqueueWatchPoll(watchId) and adds { watchId } to BullMQ queue watch-poll
+
+This should result in:
+	terminal 3
+		curl returns 202 JSON with ok: true and job info.
+
+		{"ok":true,"job":{"queue":"watch-poll","watchId":"test-watch-123","jobId":"1"}}%
+
+		Worker terminal logs processing/completed for watchId: "test-watch-123"
+
+	terminal 2
+		{"level":30,"time":1771963805809,"pid":81948,"hostname":"MacBookPro","reqId":"req-1",
+			"req":{"method":"POST","url":"/api/v1/queue/watch-poll/test-watch-123","host":"localhost:3000",
+			"remoteAddress":"127.0.0.1","remotePort":54114},"msg":"incoming request"}
+		{"level":30,"time":1771963805818,"pid":81948,"hostname":"MacBookPro","reqId":"req-1",
+			"res":{"statusCode":202},"responseTime":9.03899997472763,"msg":"request completed"}
+
+	terminal 1
+		processing watch poll job { jobId: '1', queue: 'watch-poll', watchId: 'test-watch-123' }
+		watch poll job completed { jobId: '1', result: { success: true, watchId: 'test-watch-123' } }
