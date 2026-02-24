@@ -14,7 +14,7 @@ Web app that monitors RSS feeds and notifies users when new matching listings ap
 4. Add worker foundation and job flow.
 5. Add web app shell and basic integration.
 6. Add infra, CI, and documentation hardening.
-
+s
 ## Current State/Build
 
 - Packages/shared : Validation logic
