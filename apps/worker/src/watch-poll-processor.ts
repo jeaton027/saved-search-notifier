@@ -6,6 +6,13 @@ import {
 	type WatchPollJobResult
 } from "@saved-search/shared";
 
+/*
+processWatchPollJob:
+Takes a typed BullMQ job
+Reads job.data.watchId
+Logs jobId, queue name, and watchId
+Returns { success: true, watchId }
+*/
 export const processWatchPollJob = async (
 	job: Job<WatchPollJobData, WatchPollJobResult, WatchPollJobName>
 ): Promise<WatchPollJobResult> => {
@@ -19,3 +26,4 @@ export const processWatchPollJob = async (
 
 	return { success: true, watchId };
 };
+
